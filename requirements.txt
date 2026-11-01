@@ -1,0 +1,4 @@
+playwright
+pyodbc
+gspread
+google-auth
