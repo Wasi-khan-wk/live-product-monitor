@@ -23,7 +23,7 @@ def write_changed_products(changed_products):
             return
 
         values = [
-            [p.SKU, p.PRODUCT, p.MAKER, p.PRICE, p.STOCK, p.UPDATED]
+            [p.get("SKU", ""),p.get("PRODUCT", "") ,p.get("MAKER", ""), p.get("PRICE", ""), p.get("STOCK", ""), p.get("UPDATED", "")]
             for p in changed_products
         ]
         last_row = first_row + len(values) - 1

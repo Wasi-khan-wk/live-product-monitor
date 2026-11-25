@@ -7,13 +7,18 @@ def find_changed_products(db_products, live_products):
     # Return live products whose values differ from the stored ones (matched by position).
     changed = []
     try:
-        for i in range(len(db_products)):
-            db_product = db_products[i]
-            live_product = live_products[i]
+        db_data_dict = {db_obj.SKU:vars(db_obj) for db_obj in db_products}
+        instance_data_dict = {instance_obj.SKU:vars(instance_obj) for instance_obj in live_products}
 
-            for column in vars(db_product):
-                if getattr(db_product, column) != getattr(live_product, column):
-                    changed.append(live_product)
+        for sku, instance_row in instance_data_dict.items():
+            if sku not in db_data_dict:
+                changed.append(instance_row)
+                continue
+
+            db_row = db_data_dict.get(sku, {})
+            for column_name, column_value in instance_row.items():
+                if db_row.get(column_name, "") != column_value:
+                    changed.append(instance_row)
                     break
     except Exception as e:
         print(f"An Exception Occurred in find_changed_products due to {e}")
